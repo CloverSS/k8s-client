@@ -27,9 +27,9 @@ public class PrometheusClient {
 	public historyReq getHistoryData(String namespace, String depName){
 		historyReq.Builder historyData =  historyReq.newBuilder();
 		long endtime = (new Date().getTime()) / 1000;
-		long starttime = endtime-60*60;
+		long starttime = endtime-30*60;
 
-		String condition = "namespace=\"" + namespace + "\",pod=~\"" + depName + ".*\"";
+		String condition = "namespace=\"" + namespace + "\",pod=~\"" + depName + ".*\", container=\"server\"";
 		String query = "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{" + condition + "})";
 		String theUrl = "http://" + prometheusIp + ":" + prometheusPort + "/api/v1/query_range?query=" + query + "&start=" + starttime + "&end="
 				+ endtime + "&step=30";
